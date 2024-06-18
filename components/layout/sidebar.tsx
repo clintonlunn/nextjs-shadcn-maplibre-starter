@@ -14,7 +14,7 @@ const Info = () => <div>Info Content</div>;
 const Layers = () => <div>Layers Content</div>;
 const Legend = () => <div>Legend Content</div>;
 
-const sidebarContent = {
+const sidebarContent: { [key: string]: React.ComponentType } = {
   info: Info,
   layers: Layers,
   legend: Legend,
@@ -27,20 +27,16 @@ export default function Sidebar({ className }: SidebarProps) {
   const [selectedContent, setSelectedContent] = useState<string | null>(null);
 
   const handleToggle = () => {
-    setStatus(true);
+    setSelectedContent(null);
     toggle();
+    setStatus(true);
     setTimeout(() => setStatus(false), 500);
   };
 
   const handleNavClick = (content: string) => {
     setSelectedContent(content);
   };
-  const sidebarContent: { [key: string]: React.ComponentType } = {
-    info: Info,
-    layers: Layers,
-    legend: Legend,
-    // Add more components as needed
-  };
+
   const SelectedComponent = selectedContent ? sidebarContent[selectedContent] : null;
 
   return (
@@ -63,7 +59,7 @@ export default function Sidebar({ className }: SidebarProps) {
         <div className="px-3 py-2">
           <div className="mt-3 space-y-1">
             {!selectedContent ? (<DashboardNav items={navItems} onNavClick={handleNavClick} />)
-              : (
+              : !isMinimized && (
                 <>
                   <button
                     className="flex items-center gap-2 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"

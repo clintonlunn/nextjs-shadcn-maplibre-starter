@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/icons';
@@ -7,12 +6,7 @@ import { cn } from '@/lib/utils';
 import { NavItem } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import { useSidebar } from '@/hooks/useSidebar';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from './ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -28,7 +22,7 @@ export function DashboardNav({
   onNavClick,
 }: DashboardNavProps) {
   const path = usePathname();
-  const { isMinimized } = useSidebar();
+  const { isMinimized, toggle } = useSidebar();
 
   if (!items?.length) {
     return null;
@@ -44,7 +38,11 @@ export function DashboardNav({
               <Tooltip key={index}>
                 <TooltipTrigger asChild>
                   <div
-                    onClick={() => onNavClick && onNavClick(item.title.toLowerCase())}
+                    onClick={() => {
+                      if (onNavClick) onNavClick(item.title.toLowerCase());
+                      if (isMinimized && setOpen) setOpen(true);
+                      if (!isMobileNav && isMinimized) toggle();
+                    }}
                     className={cn(
                       'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
                       path === item.href ? 'bg-accent' : 'transparent',
@@ -52,10 +50,8 @@ export function DashboardNav({
                     )}
                   >
                     <Icon className={`ml-3 size-5`} />
-                    {isMobileNav || (!isMinimized && !isMobileNav) ? (
+                    {!isMinimized && (
                       <span className="mr-2 truncate">{item.title}</span>
-                    ) : (
-                      ''
                     )}
                   </div>
                 </TooltipTrigger>
