@@ -10,15 +10,39 @@ type SidebarProps = {
   className?: string;
 };
 
+const Info = () => <div>Info Content</div>;
+const Layers = () => <div>Layers Content</div>;
+const Legend = () => <div>Legend Content</div>;
+
+const sidebarContent = {
+  info: Info,
+  layers: Layers,
+  legend: Legend,
+  // Add more components as needed
+};
+
 export default function Sidebar({ className }: SidebarProps) {
   const { isMinimized, toggle } = useSidebar();
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
+  const [selectedContent, setSelectedContent] = useState<string | null>(null);
 
   const handleToggle = () => {
     setStatus(true);
     toggle();
     setTimeout(() => setStatus(false), 500);
   };
+
+  const handleNavClick = (content: string) => {
+    setSelectedContent(content);
+  };
+  const sidebarContent: { [key: string]: React.ComponentType } = {
+    info: Info,
+    layers: Layers,
+    legend: Legend,
+    // Add more components as needed
+  };
+  const SelectedComponent = selectedContent ? sidebarContent[selectedContent] : null;
+
   return (
     <nav
       className={cn(
@@ -38,8 +62,23 @@ export default function Sidebar({ className }: SidebarProps) {
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="mt-3 space-y-1">
-            <DashboardNav items={navItems} />
+            {!selectedContent ? (<DashboardNav items={navItems} onNavClick={handleNavClick} />)
+              : (
+                <>
+                  <button
+                    className="flex items-center gap-2 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    onClick={() => setSelectedContent(null)}
+                  >
+                    <ChevronLeft className="ml-3 size-5" />
+                    <span className="mr-2">Back to Menu</span>
+                  </button>
+                </>
+              )
+            }
           </div>
+        </div>
+        <div className="px-3 py-2">
+          {!isMinimized && SelectedComponent && <SelectedComponent />}
         </div>
       </div>
     </nav>
