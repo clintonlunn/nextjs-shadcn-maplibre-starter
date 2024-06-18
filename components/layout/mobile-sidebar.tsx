@@ -26,11 +26,18 @@ export function MobileSidebar({ className }: SidebarProps) {
     setSelectedContent(content);
   };
 
+  const handleSheetOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      setSelectedContent(null);
+    }
+  };
+
   const SelectedComponent = selectedContent ? sidebarContent[selectedContent] : null;
 
   return (
     <>
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet open={open} onOpenChange={handleSheetOpenChange}>
         <SheetTrigger asChild>
           <MenuIcon />
         </SheetTrigger>
