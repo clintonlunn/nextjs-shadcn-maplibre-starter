@@ -35,6 +35,11 @@ export default function Sidebar({ className }: SidebarProps) {
 
   const handleNavClick = (content: string) => {
     setSelectedContent(content);
+    // getting the duration animation working
+    if (isMinimized) {
+      setStatus(true);
+      setTimeout(() => setStatus(false), 500); // Mimic the chevron left transition
+    }
   };
 
   const SelectedComponent = selectedContent ? sidebarContent[selectedContent] : null;
