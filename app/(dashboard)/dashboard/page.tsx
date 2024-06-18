@@ -3,8 +3,7 @@ import * as React from 'react';
 import Map from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-// getapi key from env.local
-const apiKey = process.env.BASEMAP_KEY
+const apiKey = process.env.NEXT_PUBLIC_BASEMAP_KEY;
 const basemapEnum = "ArcGIS:Streets";
 
 
