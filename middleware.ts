@@ -1,17 +1,10 @@
-// Protecting routes with next-auth
-// https://next-auth.js.org/configuration/nextjs#middleware
-// https://nextjs.org/docs/app/building-your-application/routing/middleware
+import { NextApiResponse, NextApiRequest } from 'next';
+import { NextResponse } from 'next/server';
 
-import NextAuth from 'next-auth';
-import authConfig from './auth.config';
+export default function middleware(req: NextApiRequest, res: NextApiResponse, next: any) {
+  // Your middleware logic here
+  // Since we don't want authentication, you can leave this empty
+  // If needing something like a proxy, you can do that here
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
-  // if (!req.auth) {
-  //   const url = req.url.replace(req.nextUrl.pathname, '/');
-  //   return Response.redirect(url);
-  // }
-});
-
-export const config = { matcher: ['/dashboard/:path*'] };
+  NextResponse.next();
+}
